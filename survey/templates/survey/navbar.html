@@ -1,0 +1,51 @@
+<header class="site-header">
+  <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top" style="padding-top: 0px;padding-bottom: 0px;">
+    <div class="container">
+      <a class="navbar-brand mr-4" href="{% url 'home' %}" style="padding-top: 0px; padding-bottom: 0px;">
+        <img src="/static/survey/images/MACS_logo.png" alt="" width="152" height="65">
+      </a>
+
+      <div class="collapse navbar-collapse" id="navbarToggle">
+        <div class="navbar-nav mr-auto">
+          <a class="nav-item nav-link" href="{% url 'home' %}"> Home </a>
+          {% if user.is_superuser %}
+            <a class="nav-item nav-link" href="{% url 'sectors' %}"> Sectors </a>
+            <a class="nav-item nav-link" href="{% url 'comparison' %}"> Comparison </a>
+          {% endif %}
+        </div>
+
+        {% if user.is_authenticated %}
+          <div class="navbar-nav text-white d-flex justify-content-center " style="width:100%; margin-right: 20%">
+            <div class="nav-item d-flex align-items-center" style="font-size: 18px"> {{user.first_name}} {{user.last_name}}</div>
+          </div>
+
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'instructions' %}"> Instructions </a>
+          </div>
+
+          {% if user.is_superuser %}
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'scores' %}"> API </a>
+          </div>
+
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'admin:index' %}"> Admin </a>
+          </div>
+          {% endif %}
+
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'logout' %}"> Logout</a>
+          </div>
+
+        {% else %}
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+            <a class="nav-item nav-link" href="{% url 'register' %}">Register</a>
+          </div>
+        {% endif %}
+
+      </div>
+    </div>
+  </nav>
+</header>
+

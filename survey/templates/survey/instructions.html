@@ -1,0 +1,117 @@
+{% extends "survey/layout.html"  %}
+
+{% block content %}
+<div class="container" style="margin-top:20px">
+    <h2> Instructions </h2>
+    <hr style="border-top: 1px solid">
+    <h4> What are the SDGs? </h4>
+
+    <p style="text-align: justify;"> The 17 Sustainable Development Goals (SDGs) were adopted by the UN in 2015 and are expected to be achieved by 2030.
+        Meanwhile, the SDGs are becoming even more important for Financial Institutions in their sustainability strategies and reporting.
+        It is only through a mutual commitment and joint effort that the SDGs ambitious targets are accomplished.
+    </p>
+
+    <p style="margin-bottom:40px">
+        For more information please visit: <a href="https://sdgs.un.org/goals" target="_blank"> <i> United Nations Website </i></a>
+    </p>
+
+    <div style="margin-bottom:30px">
+        <img src="/static/survey/images/SDG.png" alt="Check Sign" width="100%" height="100%">
+    </div>
+
+
+    <h4> How to use the SDG Evaluation Platform? </h4>
+    <p style="text-align: justify;"> The SDG Evaluation Platform is an online based approach for evaluating and comparing
+        specific targets within the sustainable development goals (SDGs). The SDGs are identical for each sector and are evaluated separately.
+        Sector evaluations are considered complete, and therefore eligible for comparison, when all 17 SDGs are evaluated. Each sector evaluation
+        can be later reopened and modified or continued if not complete.
+    </p>
+
+    <h5> <i> Home Page </i> </h5>
+    <ul style="margin-bottom:10px">
+        <li style="text-align: justify; padding-bottom:10px">
+            <i> Please select NACE sector </i> - Select the sector that you wish you evaluated from the dropdown menu and click 'Edit'. This
+             will take you to the evaluation page where you can start evaluating the SDGs for the selected sector.
+        </li>
+
+        <li style="text-align: justify;  padding-bottom:10px">
+            <i> Do you want to copy the evaluation from another sector? </i> - In case you have already completed the evaluation of a sector,
+            and wish to copy all the evaluations from one sector to another, select the option 'yes' from the dropdown menu after which a new
+            dropdown menu will appear asking you to select the sector to which you want to copy the evaluations too. To copy the evaluations
+            click 'Copy'.
+        </li>
+
+         <li style="text-align: justify;  padding-bottom:10px">
+            <i> Overview table </i> - At the end of the page lies the overview table. This table displays all sectors that you have evaluated,
+             a sign that signals if you have completed the evaluations of a sector (All Fields Checked) and the date of last modification. Clicking
+             on the sector name will automatically redirect you to the evaluation page where you can continue/modify your evaluation.
+        </li>
+    </ul>
+
+
+    <details>
+        <summary style="color:#007bff"> <i> More Details </i> </summary>
+        <p style="text-align: justify;"> In order to choose the sector that you wish to evaluate, select one of the available
+            sectors under the label 'Please select NACE sector:' and click 'Edit'. This will open the sector evaluation page where
+            you can start evaluating the SDGs for the selected sector. If you have already evaluated a sector, the platform offers
+            a way to quickly copy all the evaluations from one sector to another. To do this, firstly select the option 'Yes' under label
+            'Do you want to copy the evaluation from another sector?', after which a new dropdown menu will appear that will ask you
+            to choose the sector from which you would like to copy the evaluations. Once you have selected the sector click 'Copy' to complete the process.
+
+            An overview of all evaluated sectors is represented as a table just below the mentioned features. In this table,
+            besides the sector names and dates of last modification there is a column labeled 'All Fields Check' that indicated
+            if all 17 SDGs are evaluated. If so, in that column sector, there will be a
+            <img src="/static/survey/images/check.png" alt="Check Sign" width="16" height="16"> sign, otherwise there will be a
+            <img src="/static/survey/images/X.png" alt="Check Sign" width="16" height="16"> sign.
+
+            To reopen a sector evaluation, you can either select the sector from the 'Please select NACE sector:' list, or click on the sector name
+            in the overview table.
+        </p>
+    </details>
+
+    <h5 style="margin-top:30px"> <i> Sector Evaluation Page </i> </h5>
+    <ul>
+        <li style="text-align: justify;  padding-bottom:10px">
+            <i> Navigation sidebar </i> - The scrollable navigation sidebar is located on the left side of the page. By clicking on
+            one of the SDGs, the page will automatically scroll to that part of the page that displays the selected SDG. When you
+            successfully save the evaluation, a <img src="/static/survey/images/check.png" alt="Check Sign" width="16" height="16"> sign will appear.
+        </li>
+
+        <li style="text-align: justify;  padding-bottom:10px">
+            <i> Evaluation </i> -  Each SDG evaluation consists of target evaluations that contain several data fields that need to be filled in
+            with your personal opinion. In order to complete the SDG evaluation you must evaluate all the targets within it.
+            Each target evaluation contains the following fields:
+
+            <ul>
+                <li style="padding-bottom:5px"> Relevance - Possible answers: positive, negative, neutral </li>
+                <li style="padding-bottom:5px"> Predefined Comments - Set of predefined comments for both positive and negative relevance </li>
+                <li style="padding-bottom:5px"> Location specific flag ( <img src="/static/survey/images/world_icon.svg" alt="Check Sign" width="16" height="16"> ) -
+                    Checkbox that indicates if the target is location specific or not</li>
+                <li style="padding-bottom:5px"> Notes - Personal Notes that you can use to write your thoughts about the target. In case you want to write your own personal comment </li>
+                (that is not in the 'Predefined Comments' list) select the option 'Other' in the comments section and then write your personal comment in this section.
+
+            </ul>
+
+        </li>
+    </ul>
+
+    <details style="margin-bottom:30px">
+        <summary style="color:#007bff"> <i> More Details </i> </summary>
+        <p style="text-align: justify; margin-bottom:50px">
+            On this page all the SDGs, along with their targets, are represented. The evaluations are done on a 'goal based' level, meaning that the tool
+            simultaneously saves all the target evaluations within the same goal. Keep in mind that in order to save the goal evaluation you must first
+            evaluate all of its target evaluations. Each target evaluation consists of 4 parts: relevance, comment, location specific flag
+            and notes. The relevance of a target can be either positive, negative or neutral. In order to clarify your answer, you can select
+            up to 5 comments from the comment dropdown menu. There are different sets of comments for positive and negative relevance while for neutral relevance
+            you can choose both positive and negative predefined comments. If you wish to write your own comment, you can select the 'Other' option in the comment
+            dropdown menu and then in the 'Notes' section write your own comment.
+
+            The location specific flag ( <img src="/static/survey/images/world_icon.svg" alt="Check Sign" width="16" height="16"> ), represented as a checkbox,
+            can be 'checked' or 'unchecked' depending on if you think that the target is location specific for the selected sector. In the notes section you can
+            write your thoughts and resounding behind your answers.
+        </p>
+    </details>
+</div>
+
+
+{% endblock content %}

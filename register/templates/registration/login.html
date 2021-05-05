@@ -1,0 +1,24 @@
+{% extends "survey/layout.html"  %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="row d-flex justify-content-center mb-4" style="margin-top: 25px">
+        <div class="col-md-4">
+            <h2 style="margin-bottom: 25px"> Sign in to your account </h2>
+
+            <form method="POST" class="from-group">
+                {% csrf_token %}
+                {{form|crispy}}
+
+                <div class="row" style="margin-left: 0px">
+                    <button type="submit" class="btn btn-primary"> Login </button>
+                    <a href="/password_reset" class="d-flex align-items-center" style="margin-left: 20px"> Forgot your password? </a>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}

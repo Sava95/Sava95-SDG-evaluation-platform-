@@ -1,0 +1,104 @@
+{% extends "survey/layout.html"  %}
+
+{% block content %}
+<div id="success_message_sector" class="alert alert-success" role="alert" style="display:none; position:fixed; z-index: 1; margin-top:10px;
+    width: 90%"> <b> Success! </b> You have successfully added a sector!
+</div>
+
+<div id="error_message_sector" class="alert alert-danger" role="alert" style="display:none; position:fixed; z-index: 1; margin-top:10px;
+    width: 90%"> <b> Error </b> - The values that you have entered are too long. Please insert the correct sector information.
+</div>
+
+<div class="container">
+    <div class="col-md-12">
+        <form id="sector_input_form" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-group ">
+                <div class="row" style="margin-top: 10px">
+                    <h3>  NACE Sectors </h3>
+                </div>
+            </div>
+
+            <div class="form-group row " style="width: 80%">
+                <label for="sector_name" class="col-md-2" style="padding-right: 0px; margin-top:3px; font-size:20px">
+                     Sector name:
+                </label>
+
+                <div class="col-md-10" style="padding-right: 0px">
+                    <input type="text" id="sector_name" name="sector_name" placeholder="Please enter the NACE sector name"
+                           style="width:70%" class="form-control" autofocus required >
+                </div>
+            </div>
+
+             <div class="form-group row" style="width: 80%">
+                <label for="sector_code" class="col-md-2 " style="padding-right: 0px; margin-top:3px; font-size:20px">
+                    Sector code:
+                </label>
+
+                <div class="col-md-10" style="padding-right: 0px">
+                    <input type="text" id="sector_code" name="sector_code" placeholder="Please enter the NACE sector ID"
+                           style="width:70%" class="form-control" required >
+                </div>
+            </div>
+
+            <div class="form-group row" style="width: 80%">
+                <label for="sector_level" class="col-md-2 " style="padding-right: 0px; margin-top:3px; font-size:20px">
+                    Sector level:
+                </label>
+
+                <div class="col-md-10" style="padding-right: 0px">
+                    <input type="text" id="sector_level" name="sector_level" placeholder="Please enter the NACE sector level"
+                           style="width:70%" class="form-control" required >
+                </div>
+            </div>
+
+
+            <button id="SectorBtn" type="submit" name="save" value='Saved' class="btn btn-primary mb-2 px-4 ">Save</button>
+        </form>
+
+
+       <div class="form-group row" style="margin-top:40px">
+            <label for="sector_search" style="width:180px; padding-left:15px; padding-right: 0px; margin-top:3px; font-size:20px">
+                 Search for sector:
+            </label>
+
+            <div style="padding-right: 0px; padding-left:15px; width:63.5%">
+                <input id="sector_search"  class="form-control col-md-8" type="text" onkeyup="filterSector()" placeholder="Search">
+            </div>
+        </div>
+
+        <table id="sector_table" class="table table-hover" style="margin-top: 20px">
+          <thead class="thead-light">
+            <tr>
+              <th class="col-md-1" style="max-width: 4%" scope="col">#</th>
+              <th class="col-md-5" scope="col">Sector Name</th>
+              <th class="col-md-3" scope="col">Sector Code</th>
+              <th class="col-md-3" scope="col">Sector level</th>
+              <th class="col-md-1" scope="col"> </th>
+            </tr>
+          </thead>
+          <tbody>
+            <input type="hidden" id="latest_sector_id" value="{{ latest_sector_id }}">
+
+            {% for sector in sector_list %}
+            <tr id="sector_id_{{sector.id}}" class="table_rows">
+              <th id="{{sector.id}}" scope="row">{{ forloop.counter }}</th>
+              <td id="sector_name_{{sector.id}}"> {{ sector.sector_name }}</td>
+              <td id="sector_code_{{sector.id}}" style="padding-left:4.5%"> {{ sector.sector_code }}</td>
+              <td id="sector_level_{{sector.id}}" style="padding-left:5%"> {{ sector.sector_level }} </td>
+              <td class="d-flex justify-content-center">
+                  <form method="POST" >
+                    {% csrf_token %}
+                    <button value="{{sector.id}}" type="submit" style="padding-left: 1rem; padding-right: 1rem"
+                            class="btn btn-danger deleteSector"> X
+                    </button>
+                  </form>
+              </td>
+            </tr>
+           {% endfor %}
+          </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}

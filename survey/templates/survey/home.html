@@ -1,0 +1,125 @@
+{% extends "survey/layout.html"  %}
+
+{% block content %}
+
+<div id="success_message_copy" class="alert alert-success" role="alert" style="display:none; position:fixed; z-index: 1; margin-top:10px;
+    width: 90%"> <b> Success! </b> You have successfully copied the selected evaluation
+</div>
+
+<div id="error_message_evaluation" class="alert alert-danger" role="alert" style="display:none; position:fixed; z-index: 1; margin-top:10px;
+    width: 90%"> <b> Error </b> - You can't copy the evaluations from the same sector. Please select a different sector
+</div>
+
+<div class="container">
+    <div class="col-md-12">
+        <form method="POST" action="{% url 'survey' %}">
+            {% csrf_token %}
+            <h2 class="d-flex justify-content-center" style="margin-bottom: 30px;margin-top: 20px"> SDG Evaluation Platform </h2>
+
+            <div class="form-group row" style="margin-top: 20px">
+                <label class="col-md-3 d-flex align-items-center" style="padding-right: 0px; font-size:20px; margin-bottom:0px">
+                    <h5> Please select NACE sector: </h5>
+                </label>
+
+                <div class="col-md-7" style="padding-left: 0px">
+                     <select class="form-control" id="home_sector" name="sector_id">
+                         {% for sector in sectors %}
+                            <option value="{{sector.id}}"> {{sector.sector_code}} | {{ sector.sector_name }}</option>
+                         {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary mb-2 px-4" name="home_edit_btn" value="HomeEdit">Edit</button>
+            </div>
+        </form>
+
+        <form id="home_form" autocomplete="off">
+            {% csrf_token %}
+            <div class="form-group row">
+                <label for="sub_sector" class="col-md-6 d-flex align-items-center" style="padding-right: 0px; font-size:20px; margin-bottom:0px">
+                    Do you want to copy the evaluation from another sector?
+                </label>
+
+                <div class="col-md-2" style="padding-right: 0px; padding-left: 0px">
+                    <select class="form-control" id="sub_sector" style="width: 50%; text-align:center ">
+                        <option value="no" selected="selected"> no </option>
+                        <option value="yes"> yes </option>
+                    </select>
+                </div>
+            </div>
+
+             <div class="form-group" id="copy_sectorDIV">
+                 <div class="row">
+                    <label for="copy_sector" class="col-md-6 d-flex align-items-center" style="padding-right: 0px; font-size:20px; margin-bottom:0px">
+                       From which sector do you want to copy your data?
+                    </label>
+
+                    <div class="col-md-4" style="padding-left: 0px">
+                         <select class="form-control" id="copy_sector">
+                             {% for sector in copy_sectors %}
+                                <option value="{{sector.id}}">
+                                    {{sector.sector_code}} | {{ sector.sector_name }}
+                                </option>
+                             {% endfor %}
+                        </select>
+                    </div>
+
+                     <button type="submit" class="myCopy btn btn-primary mb-2 px-4" name="copy_sector_btn" value="HomeCopy">Copy</button>
+                 </div>
+            </div>
+        </form>
+
+        <div class="form-group row" style="margin-top:40px">
+          <label for="home_search" style="width:180px; padding-left:15px; padding-right: 0px; margin-top:3px; font-size:20px">
+             Search for sector:
+          </label>
+
+          <div style="padding-right: 0px; padding-left:15px; width:63.5%">
+              <input id="home_search"  class="form-control col-md-8" type="text" onkeyup="filterHome()" placeholder="Search">
+          </div>
+        </div>
+
+        <table id="home_table" class="table table-hover" style="margin-top: 20px">
+          <thead class="thead-light">
+            <tr>
+              <th class="col-md-1" style="max-width: 4%" scope="col">#</th>
+              <th class="col-md-5" scope="col">NACE Sector</th>
+              <th class="col-md-3" scope="col">All Fields Checked</th>
+              <th class="col-md-3" scope="col">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          {% for evaluation in eval_list %}
+            <tr id="sector_id_{{evaluation.id}}" class="table_rows" value="{{evaluation.all_fields_checked}}">
+              <th id="{{evaluation.id}}" scope="row">{{ forloop.counter }}</th>
+              <td id="sector_name_{{evaluation.id}}">
+                  <form id='form_{{ evaluation.id }}' method="POST" action="{% url 'survey' %}">
+                      {% csrf_token %}
+
+                      <input name="sector_id" type="hidden" value="{{ evaluation.id }}">
+                      <button class='button_link' type="submit" name="home_table_link" value="TableLink"> {{ evaluation.sector_name }}  </button>
+                  </form>
+              </td>
+
+                {% if evaluation.all_fields_checked == True %}
+                <td class="img_check_{{evaluation.id}}" style="padding-left:6%">
+                    <img src="/static/survey/images/check.png" alt="Check Sign" width="24" height="24">
+                </td>
+
+                {% elif evaluation.all_fields_checked == False %}
+                <td class="img_check_{{evaluation.id}}" style="padding-left:6%">
+                    <img src="/static/survey/images/X.png" alt="Check Sign" width="24" height="24">
+                </td>
+                {% endif %}
+
+
+              <td id="date_posted_{{evaluation.id}}"> {{ evaluation.date_posted }} </td>
+            </tr>
+          {% endfor %}
+
+          </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}

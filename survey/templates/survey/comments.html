@@ -1,0 +1,69 @@
+{% extends "survey/layout.html"  %}
+{% load static %}
+
+{% block content %}
+
+<div class="container">
+    <div style="margin-top:30px; padding:20px; border: solid 1px; border-radius: 25px;">
+        <h4 > Target {{ target_code }}:</h4>
+        <h4 style="margin-top:20px; "> <i> {{ target_label }}  </i>  </h4>
+    </div>
+
+<!-- #############################  Professional Background Chart  #############################  -->
+    <input type="hidden" id="target_code" value="{{target_code}}" />
+    <input type="hidden" id="sector_id" value="{{sector_id}}" />
+    <input type="hidden" id="user_ids" value="{{user_ids}}" />
+
+    {% if user_select == True %}
+    <!-- User information: Professional Background + Sectors   -->
+       <div class="row dflex justify-content-between" style="margin-top:20px; ">
+            <div style="position: relative; width:30vw">
+                <h2 style="margin-bottom:20px;"> Professional Background </h2>
+                <canvas id='prof_back'></canvas>
+            </div>
+
+           <div style="position: relative; width:30vw">
+                <h2 style="margin-bottom:20px;"> Sector </h2>
+                <canvas id='sector'></canvas>
+            </div>
+       </div>
+
+        <!-- Location specific -->
+        <div class="row" style="margin-top:30px; margin-bottom:30px;max-width:600px">
+            <h2 style="margin-bottom:20px;"> Location Specific </h2>
+            <canvas id='loc_spec' class='mx-4' width="200px" height="120px"></canvas>
+        </div>
+
+        <!-- Positive predefined comments -->
+        <div class="row" style="margin-top:30px;">
+            <h2 style="margin-bottom:20px;"> Positive predefined comments </h2>
+            <canvas id='positive_comments'  height="120px"></canvas>
+        </div>
+
+        <!-- Negative predefined comments -->
+        <div class="row" style="margin-top:30px;">
+            <h2 style="margin-bottom:20px;"> Negative predefined comments </h2>
+            <canvas id='negative_comments' height="120px"></canvas>
+        </div>
+
+        <!-- Other comments -->
+        <h2 style="margin-top:30px; margin-bottom:30px"> Other comments </h2>
+        <table id="other_comments_table" class="table table-bordered mx-4" style="margin-top:10px; margin-bottom:50px">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+
+          </tbody>
+        </table>
+
+    {% endif %}
+</div>
+
+<!-- Charts -->
+<script src="{% static 'js/charts.js' %}"> </script>
+
+{% endblock content %}

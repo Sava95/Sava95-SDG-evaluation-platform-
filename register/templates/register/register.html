@@ -1,0 +1,37 @@
+{% extends "survey/layout.html"  %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="col-md-12">
+    <div class="row d-flex justify-content-center mb-4" style="margin-top: 25px">
+            <div class="col-md-12 d-flex justify-content-center" style="margin-bottom: 20px;">
+                 <h2> Create an Account </h2>
+            </div>
+
+            <form method="POST" class="from-group">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        {{form|crispy}}
+                    </div>
+                    <div class="col-md-6">
+                        {{profile_form|crispy}}
+                    </div>
+                </div>
+
+                <div class="row" style="margin-bottom:10px">
+                    <input type="checkbox" id="policy" name="policy" style="margin-right: 12px" required>
+                    <label for="policy" style="margin-bottom:4px"> By clicking "Register" I agree to
+                        <a href="https://login.macsesave.com/esave2/terms_conditions/"> <i> MACS eSave terms of service </i> </a>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-success"> Register </button>
+            </form>
+    </div>
+
+
+</div>
+
+{% endblock content %}

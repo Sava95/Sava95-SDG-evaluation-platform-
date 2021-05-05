@@ -1,0 +1,31 @@
+{% extends "survey/layout.html"  %}
+
+{% block content %}
+
+ <div class="container">
+
+     <h2 style="margin: 20px 0px 40px; text-align:center"> API functionality </h2>
+
+     <div class="form-group row" style="margin-top: 20px">
+        <label class="d-flex align-items-center" style="padding-right: 0px; font-size:20px; margin-bottom:0px">
+            <h5> Please enter the loan ID: </h5>
+        </label>
+
+        <input name='load_ID' type="text" class="form-control" placeholder="Please enter the load ID   " style="width:250px; margin: 0px 0px 10px 40px"/>
+    </div>
+
+     <div class="form-group row">
+         <label class="d-flex align-items-center" style="padding: 0px; font-size:20px; margin-bottom:0px; width: 240px">
+            <h5> Please select NACE sector: </h5>
+        </label>
+
+         <select class="form-control" id="comparison_sector" name="sector_id" style="max-width:400px; margin: 0px 0px 10px 10px">
+             {% for sector in sectors %}
+                <option value="{{sector.id}}"> {{sector.sector_code}} | {{ sector.sector_name }}</option>
+             {% endfor %}
+        </select>
+     </div>
+
+ </div>
+
+{% endblock content %}

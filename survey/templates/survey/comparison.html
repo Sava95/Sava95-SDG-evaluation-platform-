@@ -1,0 +1,188 @@
+{% extends "survey/layout.html"  %}
+
+{% block content %}
+
+<div id="warning_message" class="alert alert-warning" role="alert" style="display:none; position:fixed; z-index: 1; margin-top:10px;
+    width: 90%"> <b> Warning </b> - Users: <text id="user_warning"> </text> haven't evaluated all the goals for sector: <text id="sector_warning"> </text>
+</div>
+
+<div class="container">
+    <div class="col-md-12">
+
+        <div id="loader" style="display:none; position:fixed; z-index: 1; margin: 7% 32.94%">
+            <div class="loader">   </div>
+            <div> Loading ... </div>
+        </div>
+
+        <div class="row d-flex justify-content-center" style="margin-top: 20px">
+            <h2> Evaluation Comparison </h2>
+        </div>
+
+        <form>
+            {% csrf_token %}
+            <!--     Please select NACE sector       -->
+            <div class="form-group row" style="margin-top: 20px">
+                <label class="col-md-3 d-flex align-items-center" style="padding-right: 0px; font-size:20px; margin-bottom:0px">
+                    <h5> Please select NACE sector: </h5>
+                </label>
+
+                <div class="col-md-7" style="padding-left: 0px">
+                     <select class="form-control" id="comparison_sector" name="sector_id">
+                         {% for sector in sectors %}
+                            <option value="{{sector.id}}"> {{sector.sector_code}} | {{ sector.sector_name }}</option>
+                         {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row" style="margin-top: 20px">
+                <label for="comparison_threshold" class="col-md-5 d-flex align-items-center" style="padding-right: 0px; font-size:20px; margin-bottom:0px">
+                    <h5> Threshold for determining the total relevance: </h5>
+                </label>
+
+                <div style="width:90px; padding-left: 0px">
+                    <select id="comparison_threshold" class="form-control" name="threshold">
+                        <option value="50"> 50% </option>
+                        <option value="60"> 60% </option>
+                        <option value="70"> 70% </option>
+                        <option value="80"> 80% </option>
+                        <option value="90"> 90% </option>
+                        <option value="100"> 100% </option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header" style="background-color: #fbba00">
+                   <h5 style="margin: 0" > User Selection </h5>
+                </div>
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5">
+                          <h5> Chosen Users: </h5>
+
+                          <select id="chosen_user_select" class="form-control" size="8" style="width:100%; margin-bottom: 10px">
+
+                          </select>
+                        </div>
+
+                        <div class="col-md-2" style="padding-top: 30px">
+                            <div class="row d-flex justify-content-center" style="margin-bottom: 10px">
+                                <button id="Btn_left" class="btn btn-dark"> < </button>
+                            </div>
+
+                              <div class="row d-flex justify-content-center" style="margin-bottom: 10px">
+                                <button id="Btn_double_left" class="btn btn-dark"> << </button>
+                              </div>
+
+                              <div class="row d-flex justify-content-center" style="margin-bottom: 10px">
+                                <button id="Btn_right" class="btn btn-dark"> > </button>
+                              </div>
+
+                              <div class="row d-flex justify-content-center" style="margin-bottom: 10px">
+                                <button id="Btn_double_right" class="btn btn-dark"> >> </button>
+                              </div>
+                        </div>
+
+                         <div class="col-md-5">
+                            <h5> Available Users: </h5>
+                            <input id="available_user_search" class="form-control" type="text" name="chosen_user_search"
+                                   onkeyup="filterFunction()" placeholder="Search" >
+                              <select id="available_user_select" class="form-control" size="6" style="width:100%" >
+                                  {% for user in users %}
+                                    <option value="{{user.id}}"> {{user.first_name}} {{ user.last_name }}</option>
+                                 {% endfor %}
+                              </select>
+                        </div>
+
+                    </div>
+
+                    <button id="compare_btn" class="btn btn-primary"> Compare Evaluations </button>
+                </div>
+            </div>
+        </form>
+
+        <div id="comparison_results" class="carousel slide" style="display:none" data-interval="false" data-ride="carousel">
+          <ol class="carousel-indicators" style="margin-bottom: 40px">
+              {% for goal in goals %}
+                {% subtraction_func goal.id as new_number %}
+                <li data-target="#comparison_results" data-slide-to="{{ new_number }}" class="{% if goal.id == 1 %} active {% endif %}"></li>
+              {% endfor %}
+          </ol>
+
+          <div class="carousel-inner">
+              {% for goal in goals %}
+                <div class="carousel-item {% if goal.id == 1 %} active {% endif %}" >
+                    <div class="card" style="width: 100%; margin-top: 20px; margin-bottom: 30px">
+                      <div class="card-header" style="background-color: #fbba00">
+                          <h5> <b> {{ goal.goal_name }} </b> </h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="table-responsive-xl">
+                          <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th class="col-1" scope="col">#</th>
+                                  <th class="col-8" scope="col">Target </th>
+                                  <th class="col-3" scope="col">Relevance</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                               {% for key_goal, set in target_set.items %}
+                                  {% if key_goal == goal.id %}
+                                    {% for target in set %}
+                                        <tr>
+                                          <th scope="row">{{ target.target_code }}</th>
+                                          <td> {{ target.target_label }} </td>
+                                          <td id="target_{{target.target_code}}" style="padding-left: 20px">
+                                              <form method='POST' action="/comments/">
+                                                  {% csrf_token %}
+                                                  <input name='target_code' type="hidden" value="{{ target.target_code }}">
+                                                  <input name='goal_id' type="hidden" value="{{ target.goal.id  }}">
+                                                  <input id="sector_id_T_{{target.target_code}}" name="sector_id" type="hidden">
+                                                  <input id="user_ids_T_{{target.target_code}}" name="user_ids" type="hidden">
+
+                                                  <p id="upper_{{target.target_code}}" class="d-flex justify-content-center"
+                                                     style="margin-bottom: 5px">
+                                                  </p>
+
+                                              </form>
+
+
+                                              <p id="lower_{{target.target_code}}" class="d-flex justify-content-center"
+                                                 style="margin-bottom: 0px; font-size: 14px;">
+                                              </p>
+
+                                          </td>
+                                        </tr>
+
+                                    {% endfor %}
+                                  {% endif %}
+                               {% endfor %}
+                              </tbody>
+                            </table>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              {% endfor %}
+          </div>
+
+          <a class="carousel-control-prev" href="#comparison_results" role="button" data-slide="prev" style="width:8%; margin-top:77px">
+            <span class="carousel-control-prev-icon" style="color:blue" aria-hidden="true"> </span>
+            <span class="sr-only">Previous</span>
+          </a>
+
+          <a class="carousel-control-next" href="#comparison_results" role="button" data-slide="next" style="width:8%; margin-top:77px">
+            <span class="carousel-control-next-icon" style="color:blue" aria-hidden="true"> </span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+
+
+    </div>
+</div>
+
+
+{% endblock content %}

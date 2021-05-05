@@ -1,0 +1,22 @@
+[
+  {
+    "model": "survey.SDG_target",
+    "pk": 1,
+    "fields": {
+      "name": "John",
+      "code": "23",
+      "goal": "SDG_1.1",
+    }
+  },
+
+   {
+    "model": "survey.SDG_target",
+    "pk": 2,
+    "fields": {
+      "name": "John",
+      "code": "23",
+      "goal": "SDG_1.1",
+    }
+  }
+
+]

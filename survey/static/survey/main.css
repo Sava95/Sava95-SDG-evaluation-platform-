@@ -1,0 +1,161 @@
+body {
+  background: #fafafa;
+  color: #333333;
+  margin-top: 4rem;
+  position: relative;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.list-group {
+      position: sticky;
+      top: 20px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #444444;
+}
+
+ul {
+  margin: 0;
+}
+
+.bg-steel {
+  background-color: #5f788a;
+}
+
+.site-header .navbar-nav .nav-link {
+  color: #cbd5db;
+}
+
+.site-header .navbar-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.site-header .navbar-nav .nav-link.active {
+  font-weight: 500;
+}
+
+#copy_sectorDIV {
+    display: none;
+}
+
+h4.navigation::before {
+  display: block;
+  content: " ";
+  margin-top: -60px;
+  height: 60px;
+}
+
+.sidebar{
+   position:fixed;
+
+}
+.content{
+  margin-left: 23rem;
+
+}
+
+#available_user_search {
+    background-image: url('images/search.png');
+    background-size: 15px 15px;
+    background-position: 2% 50%;
+    background-repeat: no-repeat;
+    text-indent: 20px;
+}
+#available_user_search:focus {
+    background-image:none;
+    text-indent:0px
+    }
+
+.carousel-control-prev-icon {
+ background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23BEBEBE' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+}
+
+.carousel-control-next-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23BEBEBE' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+}
+/* fill='%23000' determines the color of the arrows, %23 is the same as # and than the rest is hex color code */
+
+.carousel-indicators li {
+    background-color: #BEBEBE;
+}
+
+/* Circular loader */
+.loader {
+  border: 12px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 12px solid #3498db;
+  width: 80px;
+  height: 80px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.button_link {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  color: black;
+  cursor: pointer;
+}
+
+.bootstrap-select {
+    max-width: 165px;
+}
+
+.indecisive_link:hover {
+    color: #0056b3;
+}
+
+details[open] summary ~ * {
+  animation: sweep .5s ease-in-out;
+}
+
+@keyframes sweep {
+  0%    {opacity: 0; margin-left: -10px}
+  100%  {opacity: 1; margin-left: 0px}
+}
+
+/* Location Spec - Pop up */
+.world_icon .tooltiptext {
+  visibility: hidden;
+  width: 140px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 69.8%;
+}
+
+.world_icon .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.world_icon:hover .tooltiptext {
+  visibility: visible;
+}
