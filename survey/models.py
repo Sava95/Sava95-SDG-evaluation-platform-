@@ -95,3 +95,53 @@ class TargetComment(BaseModel):
     class Meta:
         db_table = "target_comment"
 
+
+class SdgCountryValues(BaseModel):
+    country = models.CharField(max_length = 100, default=None)
+    sdg_goal = models.CharField(max_length = 100, default=None)
+    sdg_code = models.CharField(max_length = 100, default=None)
+    country_value = models.CharField(max_length = 100, default=None)
+
+    class Meta:
+        db_table = "sdg_country_values"
+
+
+# eSave representative tables
+class eSaveCountry(BaseModel):
+    country_ID = models.AutoField(primary_key=True, default=None)
+    name = models.CharField(max_length=100, default=None)
+    short = models.CharField(max_length=100, default=None)
+
+    class Meta:
+        db_table = "xxx_country"
+
+
+class eSaveProjects(BaseModel):
+    esave_project_ID = models.AutoField(primary_key=True)
+    loan_ID = models.CharField(max_length=100, default=None)
+
+    esave_bank_ID = models.CharField(max_length=100, default=None)
+    uskp_sector_ID = models.CharField(max_length=100, default=None)
+
+    class Meta:
+        db_table = "xxx_esave_projects"
+
+
+class eSaveBanks(BaseModel):
+    esave_bank_ID = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=300, default=None)
+
+    country_ID = models.CharField(max_length=100, default=None)
+
+    class Meta:
+        db_table = 'xxx_esave_banks'
+
+
+class eSaveUskpSectors(BaseModel):
+    uskp_sector_ID = models.AutoField(primary_key=True)
+    code = models.CharField(max_length=100, default=None)
+    name = models.CharField(max_length=300, default=None)
+    parent_sector_group_id = models.CharField(max_length=100, default=None)
+
+    class Meta:
+        db_table = 'xxx_uskp_sectors'

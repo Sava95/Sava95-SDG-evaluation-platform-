@@ -3,29 +3,53 @@
 {% block content %}
 
  <div class="container">
+     <h2 style="margin: 20px 0px 30px; text-align:center"> API functionality </h2>
 
-     <h2 style="margin: 20px 0px 40px; text-align:center"> API functionality </h2>
+     <h4> Endpoint: eSave project ID </h4>
 
-     <div class="form-group row" style="margin-top: 20px">
-        <label class="d-flex align-items-center" style="padding-right: 0px; font-size:20px; margin-bottom:0px">
-            <h5> Please enter the loan ID: </h5>
-        </label>
+     <form method="GET" action="/api">
+         <div class="form-group row" style="margin-top: 20px; margin-bottom:40px">
+            <label for="project_id" class="d-flex align-items-center" style="padding-right: 0px; font-size:20px; margin-bottom:0.5rem">
+               Please enter the project ID:
+            </label>
 
-        <input name='load_ID' type="text" class="form-control" placeholder="Please enter the load ID   " style="width:250px; margin: 0px 0px 10px 40px"/>
-    </div>
+            <input id='project_id' name='project_id' type="text" class="form-control" placeholder="Please enter the project ID" style="width:250px; margin: 0px 0px 10px 40px"/>
 
-     <div class="form-group row">
-         <label class="d-flex align-items-center" style="padding: 0px; font-size:20px; margin-bottom:0px; width: 240px">
-            <h5> Please select NACE sector: </h5>
-        </label>
+             <button type="submit" class="btn btn-primary" style="width:80px; height:40px; margin-left: 42px"> GET </button>
+         </div>
+     </form>
 
-         <select class="form-control" id="comparison_sector" name="sector_id" style="max-width:400px; margin: 0px 0px 10px 10px">
-             {% for sector in sectors %}
-                <option value="{{sector.id}}"> {{sector.sector_code}} | {{ sector.sector_name }}</option>
-             {% endfor %}
-        </select>
-     </div>
+     <hr>
+
+     <h4> Endpoint: Loan ID + Bank Name </h4>
+
+     <form method="GET" action="/api">
+         <div class="row">
+             <div class="col-6" style="padding-right:0px">
+                 <div class="form-group row" style="margin-top: 20px">
+                     <label for='loan_id' class="d-flex align-items-center" style="padding: 0px; font-size:20px; margin-bottom:0.5rem; width: 240px">
+                        Please enter loan_ID:
+                     </label>
+
+                     <input id='loan_id' name='loan_id' type="text" class="form-control" placeholder="Please enter the loan ID" style="width:250px; margin: 0px 0px 10px 40px"/>
+
+                 </div>
+
+                 <div class='form-group row' >
+                      <label for='bank_name' class="d-flex align-items-center" style="padding: 0px; font-size:20px; margin-bottom:0.5rem; width: 240px">
+                        Please enter bank name:
+                     </label>
+
+                     <input id='bank_name' name='bank_name' type="text" class="form-control" placeholder="Please enter bank name" style="width:250px; margin: 0px 0px 10px 40px"/>
+                 </div>
+            </div>
+
+             <div class="col-2" style="padding:0px">
+                 <button type="submit" class="btn btn-primary" style="width:80px; height:40px; margin-top:50px"> GET </button>
+             </div>
+        </div>
+     </form>
+
 
  </div>
-
 {% endblock content %}

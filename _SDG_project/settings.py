@@ -28,7 +28,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -77,16 +76,27 @@ WSGI_APPLICATION = '_SDG_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# DATABASE_ROUTERS = ('survey.dbrouters.MyDBRouter',)
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'sdg',
+        'NAME': 'sdg_real_db',
         'USER': 'root',
         'PASSWORD': 'Tfac!995',
         'HOST': '127.0.0.1',
         'PORT': '3306',
-    }
+    },
+
+    # 'esave': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'esave2_prod',
+    #     'USER': 'tester',
+    #     'PASSWORD': 'mj6Rdfg9s!gHdrr(0',
+    #     'HOST': '192.168.151.1',
+    #     'PORT': '3306',
+    # }
+
 }
 
 
@@ -128,7 +138,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "/instructions"
 LOGOUT_REDIRECT_URL = "/"
 
 LOGIN_URL = '/login'

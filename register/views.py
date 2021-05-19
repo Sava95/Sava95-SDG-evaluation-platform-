@@ -30,7 +30,7 @@ def register(response):
                                     password=form.cleaned_data['password1'])
             login(response, new_user)   # automatically login after registration
 
-            return redirect("home")
+            return redirect("instructions")
     else:
         form = RegisterForm()
         profile_form = UserProfileForm()
