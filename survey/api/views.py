@@ -28,7 +28,16 @@ class SdgScoreApiView(APIView):
                 uskp_code = uskp_sector.code
                 uskp_parent_sector_group_id = uskp_sector.parent_sector_group_id
 
-                sector_code = str(uskp_code) + str(uskp_parent_sector_group_id)
+                # Sector code check
+                numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21']
+                letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+                           'S', 'T', 'U']
+
+                if uskp_code in letters:
+                    sector_code = uskp_code + str(uskp_parent_sector_group_id)
+                else:
+                    index = numbers.index(str(uskp_parent_sector_group_id))
+                    sector_code = letters[index] + str(uskp_code)
 
                 sector_id = Sector.objects.get(sector_code = sector_code).id
                 country = country_name
@@ -58,7 +67,18 @@ class SdgScoreApiView(APIView):
 
                 uskp_code = uskp_sector.code
                 uskp_parent_sector_group_id = uskp_sector.parent_sector_group_id
-                sector_code = str(uskp_code) + str(uskp_parent_sector_group_id)
+
+                # Sector code check
+                numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17',
+                           '18', '19', '20', '21']
+                letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+                           'S', 'T', 'U']
+
+                if uskp_code in letters:
+                    sector_code = uskp_code + str(uskp_parent_sector_group_id)
+                else:
+                    index = numbers.index(uskp_code)
+                    sector_code = letters[index] + str(uskp_parent_sector_group_id)
 
                 sector_id = Sector.objects.get(sector_code=sector_code).id
                 country = country_name
@@ -66,7 +86,7 @@ class SdgScoreApiView(APIView):
             except Exception as e:
                 Message = {
                     'message': 'The SDG score is not available for this project',
-                    'error': str(e)
+                    'error': str(e),
                     }
 
                 return Response(Message)
