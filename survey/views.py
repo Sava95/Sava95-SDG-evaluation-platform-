@@ -4,7 +4,7 @@ from django.core import serializers
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from survey.models import User, Sector, Target, Goal, Evaluation, EvaluatedGoal, PredefinedComments, TargetComment, UserProfile
+from survey.models import User, Sector, Target, Goal, Evaluation, EvaluatedGoal, PredefinedComments, TargetComment, UserProfile, eSaveBanks
 from django.http import HttpResponse
 from django.http import JsonResponse
 from collections import Counter
@@ -665,10 +665,18 @@ def comment_data(request):
 
 @login_required(login_url='login')
 def scores(request):
-    sectors = Sector.objects.all()
+    esave_banks = eSaveBanks.objects.all()
 
     content = {
-        'sectors': sectors,
+        'esave_banks': esave_banks
     }
 
     return render(request, 'survey/scores.html', content)
+
+@login_required(login_url='login')
+def relevance_result(request):
+
+    content = {
+
+    }
+    return render(request, 'survey/relevance_result.html', content)

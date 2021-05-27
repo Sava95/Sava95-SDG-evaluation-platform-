@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.shortcuts import render
 from rest_framework import status
 from rest_framework import permissions
 from survey.models import Evaluation, Sector, Target, Goal, SdgCountryValues, eSaveCountry, eSaveProjects, eSaveBanks, eSaveUskpSectors
@@ -77,8 +78,8 @@ class SdgScoreApiView(APIView):
                 if uskp_code in letters:
                     sector_code = uskp_code + str(uskp_parent_sector_group_id)
                 else:
-                    index = numbers.index(uskp_code)
-                    sector_code = letters[index] + str(uskp_parent_sector_group_id)
+                    index = numbers.index(str(uskp_parent_sector_group_id))
+                    sector_code = letters[index] + str(uskp_code)
 
                 sector_id = Sector.objects.get(sector_code=sector_code).id
                 country = country_name
@@ -87,11 +88,16 @@ class SdgScoreApiView(APIView):
                 Message = {
                     'message': 'The SDG score is not available for this project',
                     'error': str(e),
+                    'bank_name': bank_name
                     }
 
                 return Response(Message)
 
         SDG_scores = {}
+
+        relevance_list = []
+        sdg_country_value_list = []
+        sdg_code_list = []
 
         # Calculation
         for index, goal in enumerate(Goal.objects.all(), 1):
@@ -125,4 +131,19 @@ class SdgScoreApiView(APIView):
 
             SDG_scores[sdg_code]['sdg_country_value'] = sdg_country_value
 
-        return Response(SDG_scores)
+            relevance_list.append(relevance)
+            sdg_country_value_list.append(sdg_country_value)
+            sdg_code_list.append(sdg_code)
+
+        content = {
+            'relevance_list': relevance_list,
+            'sdg_country_value_list': sdg_country_value_list,
+            'sdg_code_list': sdg_code_list,
+            'country': country,
+            'sector_name': Sector.objects.get(id=sector_id).sector_name,
+            'sector_code': Sector.objects.get(id=sector_id).sector_code,
+        }
+
+        return render(request, 'survey/relevance_result.html', content)
+
+    # return Response(SDG_scores)

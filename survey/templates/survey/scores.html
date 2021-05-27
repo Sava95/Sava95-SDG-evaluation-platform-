@@ -37,10 +37,15 @@
 
                  <div class='form-group row' >
                       <label for='bank_name' class="d-flex align-items-center" style="padding: 0px; font-size:20px; margin-bottom:0.5rem; width: 240px">
-                        Please enter bank name:
+                        Please select a bank:
                      </label>
 
-                     <input id='bank_name' name='bank_name' type="text" class="form-control" placeholder="Please enter bank name" style="width:250px; margin: 0px 0px 10px 40px"/>
+<!--                     <input id='bank_name' name='bank_name' type="text" class="form-control" placeholder="Please enter bank name" style="width:250px; margin: 0px 0px 10px 40px"/>-->
+                     <select id="bank_name" name="bank_name" class="form-control" style="width:250px; margin: 0px 0px 10px 40px">
+                         {% for bank in esave_banks %}
+                            <option value="{{bank.name}}"> {{ bank.name }}</option>
+                         {% endfor %}
+                     </select>
                  </div>
             </div>
 
