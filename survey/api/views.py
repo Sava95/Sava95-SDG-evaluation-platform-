@@ -97,7 +97,6 @@ class SdgScoreApiView(APIView):
 
         relevance_list = []
         sdg_country_value_list = []
-        sdg_code_list = []
 
         # Calculation
         for index, goal in enumerate(Goal.objects.all(), 1):
@@ -127,18 +126,16 @@ class SdgScoreApiView(APIView):
                 sdg_country_value = round(min(1, relevance * (int(sdg_factor) + 1)), 2)
 
             except:
-                sdg_country_value = 'Not Available'
+                sdg_country_value = relevance
 
             SDG_scores[sdg_code]['sdg_country_value'] = sdg_country_value
 
             relevance_list.append(relevance)
             sdg_country_value_list.append(sdg_country_value)
-            sdg_code_list.append(sdg_code)
 
         content = {
             'relevance_list': relevance_list,
             'sdg_country_value_list': sdg_country_value_list,
-            'sdg_code_list': sdg_code_list,
             'country': country,
             'sector_name': Sector.objects.get(id=sector_id).sector_name,
             'sector_code': Sector.objects.get(id=sector_id).sector_code,

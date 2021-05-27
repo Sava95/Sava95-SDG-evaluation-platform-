@@ -1,0 +1,35 @@
+{% extends "survey/layout.html"  %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+     <input type="hidden" id="sdg_code_list" value="{{sdg_code_list}}" />
+     <input type="hidden" id="relevance_list" value="{{relevance_list}}" />
+     <input type="hidden" id="sdg_country_value_list" value="{{sdg_country_value_list}}" />
+
+     <h2 style="margin: 20px 0px 30px; text-align:center"> SDG relevance result </h2>
+
+     <p style="font-size: 18px"> <strong> Sector:  </strong> {{sector_code}} | {{sector_name}} </p>
+     <p style="font-size: 18px"> <strong> Country: </strong> {{country}} </p>
+
+      <p style="font-size: 18px"> <strong> Relevance list: </strong> {{relevance_list}} </p>
+      <p style="font-size: 18px"> <strong> Country value list: </strong> {{sdg_country_value_list}} </p>
+
+     <div class="row dflex justify-content-between" style="margin:40px; ">
+       <div style="position: relative; width:60vw">
+           <h3 class='d-flex justify-content-center' style="margin-bottom:20px"> Results </h3>
+
+           <canvas id='relevance_result'></canvas>
+       </div>
+     </div>
+
+
+</div>
+
+
+
+
+<!-- Charts -->
+<script src="{% static 'js/relevance_result.js' %}"> </script>
+
+{% endblock content %}
