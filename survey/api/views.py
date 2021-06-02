@@ -21,6 +21,7 @@ class SdgScoreApiView(APIView):
                 esave_bank_ID = eSaveProjects.objects.get(esave_project_ID = project_id).esave_bank_ID
                 country_ID = eSaveBanks.objects.get(esave_bank_ID = esave_bank_ID).country_ID
                 country_name = eSaveCountry.objects.get(country_ID = country_ID).name
+                bank_name = eSaveBanks.objects.get(esave_bank_ID = esave_bank_ID).name
 
                 # Sector ID
                 uskp_sector_ID = eSaveProjects.objects.get(esave_project_ID = project_id).uskp_sector_ID
@@ -135,6 +136,7 @@ class SdgScoreApiView(APIView):
 
         content = {
             'relevance_list': relevance_list,
+            'bank_name': bank_name,
             'sdg_country_value_list': sdg_country_value_list,
             'country': country,
             'sector_name': Sector.objects.get(id=sector_id).sector_name,
