@@ -1,12 +1,14 @@
 import json
+import os
+from django.conf import settings
+
 from django.core import serializers
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from survey.models import User, Sector, Target, Goal, Evaluation, EvaluatedGoal, PredefinedComments, TargetComment, UserProfile, eSaveBanks
-from django.http import HttpResponse
-from django.http import JsonResponse
+from survey.models import User, Sector, Target, Goal, Evaluation, EvaluatedGoal, PredefinedComments, TargetComment, UserProfile, eSaveBanks, FilesAdmin
+from django.http import HttpResponse, JsonResponse
 from collections import Counter
 
 
@@ -73,6 +75,7 @@ def home(request):
         'sectors': sector,
         'copy_sectors': copy_sectors,
         'eval_list': eval_list,
+        'file': FilesAdmin.objects.filter()[:1].get()
     }
 
     selectedSector_ID = request.POST.get('selectedSector_ID')
@@ -367,7 +370,6 @@ def sectors(request):
                     return JsonResponse({'sector_id': None}, safe=False)
 
                 else:
-
                     sector = Sector()
                     sector.sector_name = request.POST.get('sector_name')
                     sector.sector_code = request.POST.get('sector_code')
@@ -378,11 +380,11 @@ def sectors(request):
 
                     return JsonResponse({'sector_id': sector_id}, safe=False)
 
-            else:
-                sector_id = request.POST.get('sector_id')
-                Sector.objects.filter(id = sector_id).delete()
-
-                return HttpResponse(" Delete button ")
+            # else:
+            #     sector_id = request.POST.get('sector_id')
+            #     Sector.objects.filter(id = sector_id).delete()
+            #
+            #     return HttpResponse(" Delete button ")
 
     return render(request, 'survey/sectors.html', content)
 
@@ -680,3 +682,14 @@ def relevance_result(request):
 
     }
     return render(request, 'survey/relevance_result.html', content)
+
+
+def download(request, path):
+    file_path = os.path.join(settings.MEDIA_ROOT, path)
+
+    if os.path.exists(file_path):
+        with open(file_path, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type='application/adminupload')
+            response['Content-Disposition'] = 'inline;filename=' + os.path.basename(file_path)
+
+            return response

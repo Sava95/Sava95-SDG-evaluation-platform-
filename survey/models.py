@@ -145,3 +145,11 @@ class eSaveUskpSectors(BaseModel):
 
     class Meta:
         db_table = 'xxx_uskp_sectors'
+
+
+class FilesAdmin(BaseModel):
+    adminupload = models.FileField(upload_to = 'media')
+    title = models.CharField(max_length = 50)
+
+    def __str(self):
+        return self.title

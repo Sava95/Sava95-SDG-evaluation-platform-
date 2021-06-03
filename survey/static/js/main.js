@@ -377,8 +377,6 @@ var count = 1; // used for finding the sector id
                       newCell_4.style.paddingLeft  = "5%";
                       newCell_4.setAttribute("id", "sector_level_" + sector_id);
 
-                      var newCell_5 = newRow.insertCell();
-
                       // Append a text node to the cell
                       var newText = document.createTextNode(row_number);
                       newCell_1.appendChild(newText);
@@ -391,31 +389,6 @@ var count = 1; // used for finding the sector id
 
                       var newText = document.createTextNode(sector_level);
                       newCell_4.appendChild(newText);
-
-                      var form = document.createElement("form");
-                      form.setAttribute('method',"post");
-
-                      var csrf_token = document.createElement("input");
-                      csrf_token.setAttribute("type","hidden");
-                      csrf_token.setAttribute("name","csrfmiddlewaretoken");
-
-                      var csrf_value = document.getElementsByName("csrfmiddlewaretoken")[0].value; //the csrf value is the same for all forms
-                      csrf_token.setAttribute("value", csrf_value);
-
-                      var newBtn = document.createElement("button");
-                      newBtn.innerHTML = 'X';
-
-                      newBtn.setAttribute("value", sector_id); // the id of the new sector is the latest id + 1
-                      newBtn.setAttribute("class", "btn btn-danger deleteSector");
-                      newBtn.setAttribute("type", "submit");
-
-                      newBtn.style.paddingLeft  = "1rem";
-                      newBtn.style.paddingRight  = "1rem";
-
-
-                      form.appendChild(csrf_token)
-                      form.appendChild(newBtn);
-                      newCell_5.appendChild(form);
 
                       $("#sector_input_form").trigger("reset");  // resets the form to initial state
 
@@ -432,37 +405,6 @@ var count = 1; // used for finding the sector id
         e.preventDefault();  // prevents refreshing the page
         count++;
     });
-
-    $(document).on('click', '.deleteSector', function(e){
-        e.preventDefault();  // prevents refreshing the page
-
-        var sector_id = $(this).attr('value');
-        console.log('Sector_id: ' + sector_id)
-
-        var delete_row = document.getElementById("sector_id_" + sector_id);
-
-        var confirmation = window.confirm('Are you sure you want to delete this sector?'); // confirmation message
-        console.log(confirmation)
-
-        if (confirmation == false ) {
-
-        } else {
-            $.ajax({
-              type: 'POST',
-              url: '',
-              data: {
-                  sector_id: sector_id,
-                  csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken ]').val(),
-              },
-
-            success:function(){
-              delete_row.remove()
-            }
-
-            });
-        };
-    });
-
 
 //  ##################### COMPARISON PAGE  #####################
 //  First button: <
