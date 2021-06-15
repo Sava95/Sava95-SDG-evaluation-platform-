@@ -52,7 +52,7 @@ class SdgScoreApiView(APIView):
 
                 return Response(Message)
 
-        else:
+        elif request.GET.get('loan_id'):
             # 2. End-point: Loan ID + Bank Name
             loan_id = request.GET.get('loan_id')
             bank_name = request.GET.get('bank_name')
@@ -94,12 +94,58 @@ class SdgScoreApiView(APIView):
 
                 return Response(Message)
 
+        else:
+            bank_name = request.GET.get('bank')
+            date_from = request.GET.get('date1')
+            date_to = request.GET.get('date2')
+
+            # Country Name
+            country_ID = eSaveBanks.objects.get(name=bank_name).country_ID
+            country_name = eSaveCountry.objects.get(country_ID=country_ID).name
+
+            # Sector ID
+            bank_id = eSaveBanks.objects.get(name=bank_name).esave_bank_ID
+            uskp_sector_list = eSaveProjects.objects.filter(esave_bank_ID=bank_id)
+
+            # Sector code check
+            numbers = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17',
+                       '18', '19', '20', '21']
+            letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
+                       'S', 'T', 'U']
+
+            for project in uskp_sector_list:
+                uskp_sector_ID = project.uskp_sector_ID
+
+                uskp_sector = eSaveUskpSectors.objects.get(uskp_sector_ID=uskp_sector_ID)
+                uskp_code = uskp_sector.code
+                uskp_parent_sector_group_id_list = uskp_sector.parent_sector_group_id
+
+            if uskp_code in letters:
+                sector_code = uskp_code + str(uskp_parent_sector_group_id)
+            else:
+                index = numbers.index(str(uskp_parent_sector_group_id))
+                sector_code = letters[index] + str(uskp_code)
+
+            sector_id = Sector.objects.get(sector_code=sector_code).id
+
+            Message = {
+                'message': 'The SDG score is not available for this project',
+                'bank_name': bank_name,
+                'date_from': date_from,
+                'date_to': date_to,
+                'uskp_sector_ID_list': uskp_parent_sector_group_id_list
+            }
+
+            return Response(Message)
+
+
+
+        # Calculation
         SDG_scores = {}
 
         relevance_list = []
         sdg_country_value_list = []
 
-        # Calculation
         for index, goal in enumerate(Goal.objects.all(), 1):
             target_list_ids = Target.objects.filter(goal_id = goal.id).values_list('pk', flat=True)
 

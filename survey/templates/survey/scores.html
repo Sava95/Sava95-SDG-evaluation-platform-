@@ -2,7 +2,7 @@
 
 {% block content %}
 
- <div class="container">
+ <div class="container" style="min-height:700px">
      <h2 style="margin: 20px 0px 30px; text-align:center"> API functionality </h2>
 
      <h4> Endpoint: eSave project ID </h4>
@@ -55,6 +55,58 @@
         </div>
      </form>
 
+     <hr>
+
+     <h4 style="margin-bottom:20px"> Endpoint: Bank Name + Time period </h4>
+
+     <form method="GET" action="/api">
+         <div class="row">
+             <div class="col-6" style="padding-right:0px">
+                 <div class='form-group row' >
+                      <label for='bank' class="d-flex align-items-center" style="padding: 0px; font-size:20px; margin-bottom:0.5rem; width: 240px">
+                        Please select a bank:
+                     </label>
+
+<!--                     <input id='bank_name' name='bank_name' type="text" class="form-control" placeholder="Please enter bank name" style="width:250px; margin: 0px 0px 10px 40px"/>-->
+                     <select id="bank" name="bank" class="form-control" style="width:250px; margin: 0px 0px 10px 40px">
+                         {% for bank in esave_banks %}
+                            <option value="{{bank.name}}"> {{ bank.name }}</option>
+                         {% endfor %}
+                     </select>
+                 </div>
+
+                  <div class='form-group row'>
+                      <label for='bank' class="d-flex align-items-center" style="padding: 0px; font-size:20px; margin-bottom:0.5rem; width: 260px">
+                        Please choose a time period:
+                     </label>
+
+                      <div class="dates row" style="margin-left:20px">
+                          <input id="date1" name='date1' type="text" style="width:130px" class="form-control " placeholder="DD-MM-YYYY" autocomplete="off"  required>
+                          <p style="margin:5px 20px 0px; justify-content:center"> - </p>
+                          <input id="date2" name='date2' type="text" style="width:130px" class="form-control " placeholder="DD-MM-YYYY" autocomplete="off" required>
+                      </div>
+                 </div>
+            </div>
+
+             <div class="col-2" style="padding:0px">
+                 <button type="submit" class="btn btn-primary" style="width:80px; height:40px; margin-top: 30px; margin-left: 30px "> GET </button>
+             </div>
+        </div>
+     </form>
+
+    <script>
+        $(function() {
+            $('.dates #date1').datepicker({
+                'format': 'dd-mm-yyyy',
+                'autoclose': true
+            });
+
+             $('.dates #date2').datepicker({
+                'format': 'dd-mm-yyyy',
+                'autoclose': true
+            });
+        });
+    </script>
 
  </div>
 {% endblock content %}

@@ -100,7 +100,8 @@ class SdgCountryValues(BaseModel):
     country = models.CharField(max_length = 100, default=None)
     sdg_goal = models.CharField(max_length = 100, default=None)
     sdg_code = models.CharField(max_length = 100, default=None)
-    country_value = models.CharField(max_length = 100, default=None)
+    country_value_2020 = models.CharField(max_length = 100, default=None)
+    country_value_2021 = models.CharField(max_length = 100, default=None)
 
     class Meta:
         db_table = "sdg_country_values"
