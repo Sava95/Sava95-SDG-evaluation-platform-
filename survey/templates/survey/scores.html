@@ -42,6 +42,8 @@
 
 <!--                     <input id='bank_name' name='bank_name' type="text" class="form-control" placeholder="Please enter bank name" style="width:250px; margin: 0px 0px 10px 40px"/>-->
                      <select id="bank_name" name="bank_name" class="form-control" style="width:250px; margin: 0px 0px 10px 40px">
+                         <option value="n/a" selected> - select - </option>
+
                          {% for bank in esave_banks %}
                             <option value="{{bank.name}}"> {{ bank.name }}</option>
                          {% endfor %}
@@ -67,23 +69,34 @@
                         Please select a bank:
                      </label>
 
-<!--                     <input id='bank_name' name='bank_name' type="text" class="form-control" placeholder="Please enter bank name" style="width:250px; margin: 0px 0px 10px 40px"/>-->
                      <select id="bank" name="bank" class="form-control" style="width:250px; margin: 0px 0px 10px 40px">
+                         <option value="n/a" selected> - select - </option>
+
                          {% for bank in esave_banks %}
-                            <option value="{{bank.name}}"> {{ bank.name }}</option>
+                            <option value="{{bank.esave_bank_ID}}"> {{ bank.name }}</option>
                          {% endfor %}
+                     </select>
+                 </div>
+
+                  <div id="sof_div" class='form-group row' style="display:none">
+                      <label for='sof' class="d-flex align-items-center" style="padding: 0px; font-size:20px; margin-bottom:0.5rem; width: 240px">
+                        Please select a source of funds:
+                     </label>
+
+                     <select id="sof" name="sof" class="form-control" style="width:250px; margin: 0px 0px 10px 40px">
+
                      </select>
                  </div>
 
                   <div class='form-group row'>
                       <label for='bank' class="d-flex align-items-center" style="padding: 0px; font-size:20px; margin-bottom:0.5rem; width: 260px">
                         Please choose a time period:
-                     </label>
+                      </label>
 
                       <div class="dates row" style="margin-left:20px">
-                          <input id="date1" name='date1' type="text" style="width:130px" class="form-control " placeholder="DD-MM-YYYY" autocomplete="off"  required>
+                          <input id="date1" name='date1' type="text" style="width:130px" class="form-control " placeholder="YYYY-MM-DD" autocomplete="off"  required>
                           <p style="margin:5px 20px 0px; justify-content:center"> - </p>
-                          <input id="date2" name='date2' type="text" style="width:130px" class="form-control " placeholder="DD-MM-YYYY" autocomplete="off" required>
+                          <input id="date2" name='date2' type="text" style="width:130px" class="form-control " placeholder="YYYY-MM-DD" autocomplete="off" required>
                       </div>
                  </div>
             </div>
@@ -97,12 +110,12 @@
     <script>
         $(function() {
             $('.dates #date1').datepicker({
-                'format': 'dd-mm-yyyy',
+                'format': 'yyyy-mm-dd',
                 'autoclose': true
             });
 
              $('.dates #date2').datepicker({
-                'format': 'dd-mm-yyyy',
+                'format': 'yyyy-mm-dd',
                 'autoclose': true
             });
         });

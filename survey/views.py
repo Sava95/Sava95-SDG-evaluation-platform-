@@ -7,7 +7,8 @@ from django.core import serializers
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
-from survey.models import User, Sector, Target, Goal, Evaluation, EvaluatedGoal, PredefinedComments, TargetComment, UserProfile, eSaveBanks, FilesAdmin
+from survey.models import User, Sector, Target, Goal, Evaluation, EvaluatedGoal, PredefinedComments, TargetComment, \
+    UserProfile, eSaveBanks, FilesAdmin, SoF
 from django.http import HttpResponse, JsonResponse
 from collections import Counter
 
@@ -665,23 +666,22 @@ def comment_data(request):
 
     return JsonResponse(data, safe=False)
 
+
 @login_required(login_url='login')
 def scores(request):
     esave_banks = eSaveBanks.objects.all()
 
     content = {
-        'esave_banks': esave_banks
+        'esave_banks': esave_banks,
     }
 
     return render(request, 'survey/scores.html', content)
 
+
 @login_required(login_url='login')
 def relevance_result(request):
 
-    content = {
-
-    }
-    return render(request, 'survey/relevance_result.html', content)
+    return render(request, 'survey/relevance_result.html')
 
 
 def download(request, path):
@@ -693,3 +693,18 @@ def download(request, path):
             response['Content-Disposition'] = 'inline;filename=' + os.path.basename(file_path)
 
             return response
+
+
+def get_sof(request):
+    bank_id = request.GET.get('bank_id')
+    sof = SoF.objects.filter(esave_bank_ID = bank_id)
+
+
+    context = {
+        'sof_name': list(sof.values_list('name', flat=True)),
+        'sof_id': list(sof.values_list('esave_source_of_fund_ID', flat=True)),
+    }
+
+    data = json.dumps(context, indent=2, default=str)
+
+    return JsonResponse(data, safe=False)

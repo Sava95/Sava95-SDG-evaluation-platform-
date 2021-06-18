@@ -13,5 +13,6 @@ urlpatterns = [
     path('scores/', views.scores, name='scores'),
     path('relevance_result/', views.relevance_result, name='relevance_result'),
     path('api/', include('survey.api.urls')),
+    path('get_sof/', views.get_sof, name='get_sof')
 ]
 

@@ -722,6 +722,40 @@ $('#id_Sector').change(function(){
     }
 })
 
+// API show SoF
+$("#bank").on('change', function(e){
+    if ($("#bank")[0].value == 'n/a'){
+        $('#sof_div').css('display', 'none')
+    } else {
+        $('#sof_div').css('display', 'flex')
+
+        $.ajax({
+            type: 'GET',
+            url: '/get_sof/',
+            data: {
+                bank_id: $("#bank")[0].value,
+                csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken ]').val(),
+            },
+           success:function(data){
+                console.log(data);
+                var obj = JSON.parse(data);
+                console.log(obj)
+                console.log(obj['sof_name'])
+
+                $('#sof').find('option').remove()
+
+                $.each(obj['sof_name'], function (index, val) {
+                    $('#sof').append($('<option>', {
+                        value: obj['sof_id'][index],
+                        text : val,
+                    }));
+                });
+           }
+       })
+
+    }
+})
+
 });
 
 //  ##################### Search Filters  #####################
