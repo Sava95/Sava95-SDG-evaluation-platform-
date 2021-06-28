@@ -124,6 +124,8 @@ class eSaveProjects(BaseModel):
     esave_bank_ID = models.CharField(max_length=100, default=None)
     uskp_sector_ID = models.CharField(max_length=100, default=None)
     esave_source_of_fund_ID = models.CharField(max_length=100, default=None)
+    loan_amount = models.CharField(max_length=100, default=None)
+    loan_amount_exchange_rate_euro = models.CharField(max_length=100, default=None)
     create_datetime = models.DateTimeField(auto_now = True)
 
     class Meta:

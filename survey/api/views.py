@@ -1,3 +1,4 @@
+from _pytest.assertion.util import isset
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import render
@@ -112,7 +113,7 @@ class SdgScoreApiView(APIView):
                 country_ID = eSaveBanks.objects.get(esave_bank_ID=bank_id).country_ID
                 country = eSaveCountry.objects.get(country_ID=country_ID).name
 
-                # Sector ID
+                # Project list
                 project_list = eSaveProjects.objects.filter(esave_bank_ID=bank_id, esave_source_of_fund_ID = sof_id,
                                                             create_datetime__range=[date_from, date_to])
 
@@ -123,23 +124,34 @@ class SdgScoreApiView(APIView):
                            'S', 'T', 'U']
 
                 sector_id_list = []
+                loan_amount_list = []
 
                 for project in project_list:
                     uskp_sector_ID = project.uskp_sector_ID
 
-                    uskp_sector = eSaveUskpSectors.objects.get(uskp_sector_ID=uskp_sector_ID)
-                    uskp_code = uskp_sector.code
-                    uskp_parent_sector_group_id = uskp_sector.parent_sector_group_id
+                    if uskp_sector_ID is not None:  # checking to see if the sector has a uskp sector id
+                        uskp_sector = eSaveUskpSectors.objects.get(uskp_sector_ID=uskp_sector_ID)
+                        uskp_code = uskp_sector.code
+                        uskp_parent_sector_group_id = uskp_sector.parent_sector_group_id
 
-                    if uskp_code in letters:
-                        sector_code = uskp_code + str(uskp_parent_sector_group_id)
-                    else:
-                        index = numbers.index(str(uskp_parent_sector_group_id))
-                        sector_code = letters[index] + str(uskp_code)
+                        if uskp_code in letters:
+                            sector_code = uskp_code + str(uskp_parent_sector_group_id)
+                        else:
+                            index = numbers.index(str(uskp_parent_sector_group_id))
+                            sector_code = letters[index] + str(uskp_code)
 
-                    sector_id = Sector.objects.get(sector_code=sector_code).id
+                        if Sector.objects.filter(sector_code=sector_code):  # if there are sectors with sector_code
+                            sector_id = Sector.objects.get(sector_code=sector_code).id
+                            sector_id_list.append(sector_id)
 
-                    sector_id_list.append(sector_id)
+                            del sector_id
+
+                            # Calculating sector loan amount
+                            loan_amount = int(project.loan_amount)/int(project.loan_amount_exchange_rate_euro)
+                            loan_amount_list.append(loan_amount)
+
+                sector_unique_id_list = list(set(sector_id_list))  # find unique sectors
+                total_loan_amount = sum(loan_amount_list)
 
             except Exception as e:
                 Message = {
@@ -155,37 +167,72 @@ class SdgScoreApiView(APIView):
         SDG_scores = {}
 
         relevance_list = []
+        weighed_relevance_list = []
+
+        relevance_sector_list = []
+        weighed_relevance_sector_list = []
+
         sdg_country_value_list = []
 
-        for index, goal in enumerate(Goal.objects.all(), 1):
+        for index, goal in enumerate(Goal.objects.all(), 1):   # calculates the relevance for each goal
             target_list_ids = Target.objects.filter(goal_id=goal.id).values_list('pk', flat=True)
 
             try:
                 if sector_id_list:
-                    target_relevance = list(Evaluation.objects.filter(sector_id__in=sector_id_list,
-                                                                      goal_id=goal.id,
-                                                                      target_id__in=target_list_ids).values_list('relevance',flat=True))
-                else:
+                    for index_2, sector_id in enumerate(sector_id_list):
+                        target_relevance = list(Evaluation.objects.filter(sector_id=sector_id,
+                                                                          goal_id=goal.id,
+                                                                          target_id__in=target_list_ids).values_list('relevance', flat=True))
+
+                        target_count = len(target_relevance)
+                        positive_relevance_count = target_relevance.count('positive')
+                        negative_relevance_count = target_relevance.count('negative')
+
+                        if (positive_relevance_count - negative_relevance_count) != 0:
+                            relevance = round((positive_relevance_count - negative_relevance_count) / target_count, 2)
+                        else:
+                            relevance = 0
+
+                        relevance_sector_list = relevance_sector_list.append(relevance)   # list of relevance's per sector
+                        # weighed_relevance = relevance * loan_amount[index_2]/total_loan_amount
+
+                        # weighed_relevance_sector_list = weighed_relevance_sector_list.append(weighed_relevance)
+
+                    sdg_code = str("SDG_" + str(index))
+
+                    SDG_scores.setdefault(sdg_code, {})['relevance'] = {}  # creates an empty ['relevance'] nested list
+                    SDG_scores.setdefault(sdg_code, {})['weighted_relevance'] = {}  # creates an empty ['relevance'] nested list
+
+                    SDG_scores[sdg_code]['relevance'] = sum(relevance_sector_list)/len(relevance_sector_list)
+                    # SDG_scores[sdg_code]['weighted_relevance'] = sum(weighed_relevance_sector_list)
+
+                elif isset('sector_id'):  # 1. or 2. end point
                     target_relevance = list(Evaluation.objects.filter(sector_id=sector_id,
                                                                       goal_id=goal.id,
                                                                       target_id__in=target_list_ids).values_list('relevance',
                                                                                                                  flat=True))
+                    target_count = len(target_relevance)
+                    positive_relevance_count = target_relevance.count('positive')
+                    negative_relevance_count = target_relevance.count('negative')
 
-                target_count = len(target_relevance)
-                positive_relevance_count = target_relevance.count('positive')
-                negative_relevance_count = target_relevance.count('negative')
+                    if (positive_relevance_count - negative_relevance_count) != 0:
+                        relevance = round((positive_relevance_count - negative_relevance_count) / target_count, 2)
+                    else:
+                        relevance = 0
 
-                if (positive_relevance_count - negative_relevance_count) != 0:
-                    relevance = round((positive_relevance_count - negative_relevance_count) / target_count, 2)
+                    sdg_code = str("SDG_" + str(index))
+
+                    SDG_scores.setdefault(sdg_code, {})['relevance'] = {}  # creates an empty ['relevance'] nested list
+                    SDG_scores[sdg_code]['relevance'] = relevance
+
                 else:
-                    relevance = 0
+                    Message = {
+                        'message': 'There are no projects',
+                    }
 
-                sdg_code = str("SDG_" + str(index))
+                    return Response(Message)
 
-                SDG_scores.setdefault(sdg_code, {})['relevance'] = {}  # creates an empty ['relevance'] nested list
-                SDG_scores[sdg_code]['relevance'] = relevance
-
-                try:
+                try:   # country specific parameters
                     sdg_country_object = SdgCountryValues.objects.filter(sdg_code=sdg_code, country=country)[0]
                     sdg_factor = getattr(sdg_country_object, 'country_value_2021')
                     sdg_country_value = round(min(1, relevance * (int(sdg_factor) + 1)), 2)
@@ -198,6 +245,9 @@ class SdgScoreApiView(APIView):
                 relevance_list.append(relevance)
                 sdg_country_value_list.append(sdg_country_value)
 
+                # if sector_id_list:
+                #     weighed_relevance_list.append(SDG_scores[sdg_code]['weighted_relevance'])
+
             except Exception as e:
                 Message = {
                     'message': 'The SDG score is not available for this project',
@@ -208,14 +258,27 @@ class SdgScoreApiView(APIView):
 
         content = {
             'relevance_list': relevance_list,
+            'weighed_relevance_list': weighed_relevance_list,
             'bank_name': bank_name,
             'sdg_country_value_list': sdg_country_value_list,
+            'total_loan_amount': total_loan_amount,
+            'loan_amount_list': loan_amount_list,
             'country': country,
         }
+        sector_name_list = []
+        sector_code_list = []
 
-        if sector_id_list:
-            content['sector_name'] = Sector.objects.get(id__in=sector_id_list).sector_name,
-            content['sector_code'] = Sector.objects.get(id__in=sector_id_list).sector_code,
+        if sector_id_list:   # if 3.end point
+            for sector_id_in_list in sector_id_list:
+                sector_name = Sector.objects.get(id = sector_id_in_list).sector_name,
+                sector_code = Sector.objects.get(id = sector_id_in_list).sector_code,
+
+                sector_name_list.append(sector_name)
+                sector_code_list.append(sector_code)
+
+            content['sector_name'] = sector_name_list,
+            content['sector_code'] = sector_code_list,
+
         else:
             content['sector_name'] = Sector.objects.get(id=sector_id).sector_name,
             content['sector_code'] = Sector.objects.get(id=sector_id).sector_code,

@@ -698,7 +698,7 @@ def download(request, path):
 def get_sof(request):
     bank_id = request.GET.get('bank_id')
     sof = SoF.objects.filter(esave_bank_ID = bank_id)
-
+    # sof = SoF.objects.using('esave').filter(esave_bank_ID = bank_id)
 
     context = {
         'sof_name': list(sof.values_list('name', flat=True)),
